@@ -1,0 +1,24 @@
+{
+  "name": "miniwebpack",
+  "version": "1.0.0",
+  "description": "mini webpack",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/index.js"
+  },
+  "author": "ray",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/generator": "^7.10.5",
+    "@babel/traverse": "^7.10.5",
+    "@babel/types": "^7.10.5",
+    "babylon": "^6.18.0",
+    "ejs": "^3.1.3",
+    "less-loader": "^6.2.0",
+    "tapable": "^1.1.3"
+  }
+}
