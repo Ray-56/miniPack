@@ -10,6 +10,8 @@ let Update = 'Update'; // 表示当前节点有更新
 let Deletion = 'Deletion'; // 表示当前节点要被删除
 let PlacementAndUpdate = 'PlacementAndUpdate'; // 一般是节点换位置同时更新
 
+let nextUnitOfWork = null;
+
 class FiberNode {
     constructor(tag, key, pendingProps) {
         this.tag = tag; // 当前 fiber 的类型
@@ -64,6 +66,10 @@ function createWorkInProgress(current, pendingProps) {
         咱们每次创建（或复用）workInProgress 是从 current.alternate 上拿的对象
         复用的这个 alternate 上 updateQueue 上不一定有新的更新
         所以这里要判断如果 current.alternate 上没有新的更新的话，就说明本轮更新找到的这个 fiber 存在于 current 树上
+
+        源码中没有这个判断
+        在执行 createWorkInProgress 之前调用了一个 enqueueUpdate 方法
+        这个方法将 fiber 和 current.alternate 上的 updateQueue的新状态，进行了同步
     */
     if (
         !!workInProgress &&
@@ -79,6 +85,42 @@ function createWorkInProgress(current, pendingProps) {
     workInProgress.sibling = current.sibling;
     workInProgress.index = current.index;
     return workInProgress;
+}
+
+function beginWork(workInProgress) {
+    let next
+
+    return next;
+}
+
+function completeUnitOfWork(workInProgress) {
+    while (true) {
+        let retrunFiber = workInProgress.return;
+        let siblingFiber = workInProgress.sibling;
+
+
+        if (!!siblingFiber) return siblingFiber;
+        if (!!retrunFiber) {
+            workInProgress = retrunFiber;
+            continue;
+        }
+    }
+}
+
+function performUnitOfWork(workInProgress) {
+    let next = beginWork(workInProgress);
+
+    if (next === null) {
+        next = completeUnitOfWork(workInProgress);
+    }
+
+    return next;
+}
+
+function workLoop(nextUnitOfWork) {
+    while (!!nextUnitOfWork) {
+        nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
+    }
 }
 
 class ReactRoot {
@@ -101,6 +143,11 @@ class ReactRoot {
         let root = this._internalRoot;
 
         let workInProgress = createWorkInProgress(root.current, null);
+
+        workInProgress.memoizedState = { element: reactElement };
+
+        nextUnitOfWork = workInProgress;
+        workLoop(nextUnitOfWork);
     }
 }
 
