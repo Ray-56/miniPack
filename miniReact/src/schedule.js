@@ -15,7 +15,7 @@ import { setProps } from './utils';
 // 47:28
 let nextUnitOfWork = null; // 下一个工作单元
 let workInProgressRoot = null; // RootFiber 应用的根
-export function scheduleRoot(rootFiber) { // {tag: TAG_ROOT, stateNode: container, props: { children: [element]}}
+export function scheduleRoot(rootFiber, ) { // {tag: TAG_ROOT, stateNode: container, props: { children: [element]}}
     workInProgressRoot = rootFiber;
     nextUnitOfWork = rootFiber;
 }
@@ -122,7 +122,7 @@ function reconcileChildren(currentFiber, newChildren) {
     while (newChildIndex < newChildren.length) {
         let newChild = newChildren[newChildIndex]; // 取出元素节点
         let tag;
-        if (newChild.type === ELEMENT_TEXT) {
+        if (newChild.type == ELEMENT_TEXT) {
             tag = TAG_TEXT; // 文本节点
         } else if (typeof newChild.type === 'string') {
             tag = TAG_HOST; // 如果是字符串，那么是一个原生 DOM 节点
@@ -153,7 +153,7 @@ function reconcileChildren(currentFiber, newChildren) {
 // 循环执行工作 nextUnitWork
 function workLoop(deadline) {
     let shouldYield = false; // 是否要让出时间片或者说控制权
-    while (nextUnitOfWork && !shouldYield) {
+    while (nextUnitOfWork && shouldYield) {
         nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
         shouldYield = deadline.timeRemaining() < 1; // 剩余时间小于1，就说明没有时间，让出控制权
     }
@@ -161,9 +161,8 @@ function workLoop(deadline) {
         console.log('render 阶段结束');
         commitRoot();
     }
-    console.log('work loop ing')
     // 不管有没有任务，都请求再次调度 每一帧都要执行一个 workloop
-    requestIdleCallback(workLoop, { timeout: 500 });
+    requestIdelCallback(workLoop, { timeout: 500 });
 }
 
 function commitRoot() {
@@ -182,8 +181,8 @@ function commitWork(currentFiber) {
     if (currentFiber.effectTag === PLACEMENT) {
         returnDOM.appendChild(currentFiber.stateNode);
     }
-    currentFiber.effectTag = null;
+    currentFiber .effectTag = null;
 }
 
 // react 告诉浏览器，我现在有任务请你在闲的时候，
-requestIdleCallback(workLoop, { timeout: 500 });
+requestIdelCallback(workLoop, { timeout: 500 });

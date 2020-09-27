@@ -1,5 +1,5 @@
 import { TAG_ROOT } from './constants';
-import { scheduleRoot } from './scheduler';
+import { scheduleRoot } from './schedule';
 
 function render(element, container) {
     let rootFiber = {

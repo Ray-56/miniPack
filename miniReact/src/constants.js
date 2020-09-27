@@ -10,12 +10,6 @@ export const TAG_HOST = Symbol.for('TAG_HOST');
 // 这个是文本节点
 export const TAG_TEXT = Symbol.for('TAG_TEXT');
 
-// 这是类组件
-export const TAG_CLASS = Symbol.for('TAG_CLASS');
-
-// 这是函数组件
-export const TAG_FUNCTION_COMPONENT = Symbol.for('TAG_FUNCTION_COMPONENT');
-
 // 插入节点
 export const PLACEMENT = Symbol.for('PLACEMENT');
 
